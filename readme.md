@@ -12,6 +12,7 @@ This project is a lot more complex. Multiple events are introduced and dev techn
 6. MongoDB to store user, ticket, order, charge object
 7. Redis to handle ticket lock/unlock
 8. NATS streaming server
+9. Type `thisisunsafe` in chrome to get rid of warning
 
 ### App Intro
 
