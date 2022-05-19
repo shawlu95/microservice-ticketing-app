@@ -11,16 +11,11 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof RequestValidationErorr) {
-    const formatted = err.errors.map((error) => {
-      return { message: error.msg, field: error.param };
-    });
-    return res.status(StatusCodes.BAD_REQUEST).send({ errors: formatted });
+    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
 
   if (err instanceof DatabaseConnectionError) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send({ errors: [{ message: err.reason }] });
+    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
 
   res.status(StatusCodes.BAD_REQUEST).send({
