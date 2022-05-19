@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import { Request, Response, NextFunction } from 'express';
 import { RequestValidationErorr } from '../errors/request-validation-error';
 import { DatabaseConnectionError } from '../errors/database-connection-error';
@@ -10,13 +11,19 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof RequestValidationErorr) {
-    console.log('validation err');
+    const formatted = err.errors.map((error) => {
+      return { message: error.msg, field: error.param };
+    });
+    return res.status(StatusCodes.BAD_REQUEST).send({ errors: formatted });
   }
 
   if (err instanceof DatabaseConnectionError) {
-    console.log('db connection err');
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ errors: [{ message: err.reason }] });
   }
-  res.status(400).send({
-    message: err.message,
+
+  res.status(StatusCodes.BAD_REQUEST).send({
+    errors: [{ message: err.message }],
   });
 };
