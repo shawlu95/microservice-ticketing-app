@@ -13,15 +13,19 @@ const validators = [
     .withMessage('Length must be 4~20'),
 ];
 
-router.post('/api/users/signup', validators, (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throw new RequestValidationErorr(errors.array());
-  }
+router.post(
+  '/api/users/signup',
+  validators,
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new RequestValidationErorr(errors.array());
+    }
 
-  const { email, password } = req.body;
-  throw new DatabaseConnectionError();
-  return res.send({ email, password });
-});
+    const { email, password } = req.body;
+    throw new DatabaseConnectionError();
+    return res.send({ email, password });
+  }
+);
 
 export { router as signupRouter };
