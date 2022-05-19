@@ -1,7 +1,15 @@
 import { StatusCodes } from 'http-status-codes';
 import { ValidationError } from 'express-validator';
 
-export class RequestValidationErorr extends Error {
+interface CustomError {
+  statusCode: number;
+  serializeErrors(): {
+    message: string;
+    field?: string; // optional
+  }[]; // an array of object
+}
+
+export class RequestValidationErorr extends Error implements CustomError {
   statusCode = StatusCodes.BAD_REQUEST;
   constructor(public errors: ValidationError[]) {
     super();
