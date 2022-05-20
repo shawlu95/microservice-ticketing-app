@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Password } from '../services/password';
 
 // Describe the properties required to create new user
 interface UserAttrs {
@@ -26,6 +27,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+// With old fashion function, we have access to the actual user being saved
+// Arrow function would lose the context!
+userSchema.pre('save', async function (done) {
+  if (this.isModified('password')) {
+    // only hash when modified, do not rehash a hashed password
+    // isModified will return true when first created
+    const hashed = await Password.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+  done();
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
