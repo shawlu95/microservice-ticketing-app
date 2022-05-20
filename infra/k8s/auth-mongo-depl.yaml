@@ -11,10 +11,10 @@ spec:
     metadata:
       labels:
         app: auth-mongo
-      spec:
-        containers:
-          - name: auth-mongo
-            image: mongo
+    spec:
+      containers:
+        - name: auth-mongo
+          image: mongo
 ---
 apiVersion: v1
 kind: Service
