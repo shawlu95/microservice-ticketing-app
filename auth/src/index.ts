@@ -31,6 +31,10 @@ app.get('*', async (req, res) => {
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.jwt) {
+    throw new Error('JWT key is undefined');
+  }
+
   try {
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
     console.log('connected to mongodb');

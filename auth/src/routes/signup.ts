@@ -35,15 +35,12 @@ router.post(
     const user = User.build({ email, password });
     await user.save();
 
-    if (!process.env.jwt) {
-      throw new Error('JWT key is undefined');
-    }
     const userJwt = jwt.sign(
       {
         id: user.id,
         email: user.email,
       },
-      process.env.jwt
+      process.env.jwt! // suppress typescript warning
     );
 
     // attach jwt to cookie (must be https protocol)
