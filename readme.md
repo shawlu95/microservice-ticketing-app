@@ -100,6 +100,7 @@ JSON.stringify(person);
 
 - Be clear with the scope with test (single service, cross service, event-bus etc)
 - We use `supertest` library
+  - use `--save-dev` for test dependencies, mark `--only=prod` in Dockerfile
 - Cannot manually code the port in `index.ts` which will cause conflict
   - refactor into `app.ts` which is imported by `index.ts`
   - start-up logic lives in `index.ts`
