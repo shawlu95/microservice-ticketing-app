@@ -95,3 +95,11 @@ const person = {
 };
 JSON.stringify(person);
 ```
+
+### Unit Test
+
+- Be clear with the scope with test (single service, cross service, event-bus etc)
+- We use `supertest` library
+- Cannot manually code the port in `index.ts` which will cause conflict
+  - refactor into `app.ts` which is imported by `index.ts`
+  - start-up logic lives in `index.ts`
