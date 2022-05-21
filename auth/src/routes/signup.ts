@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
 import { User } from '../model/user';
-import { RequestValidationErorr } from '../errors/request-validation-error';
+import { validateRequest } from '../middlewares/validate-request';
 import { StatusCodes } from 'http-status-codes';
 import { BadRequestError } from '../errors/bad-request-error';
 
@@ -20,12 +20,8 @@ const validators = [
 router.post(
   '/api/users/signup',
   validators,
+  validateRequest,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new RequestValidationErorr(errors.array());
-    }
-
     const { email, password } = req.body;
     const existing = await User.findOne({ email });
     if (existing) {
