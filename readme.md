@@ -64,3 +64,20 @@ npm start
 - In this project, cookie is not encrypted
   - JWT is naturally resistant to tampering, OK in most purpose
   - No need to encrypt unless password/sensitive info is involved
+
+### Json Web Token
+
+- consists of three parts: header, payload, verify signature
+- to generate jwt: provide payload and signing key
+- all services need to know the signing key. Nobody else can access
+- decode jwt token to a json object [here](https://www.base64decode.org)
+- decode jwt string to original content [here](https://jwt.io)
+
+### Kubernetes Secret
+
+A method of sharing key-value pair across pods (env variables)
+
+```bash
+kubectl create secret generic jwt-secret --from-literal=jwt=asff
+kubectl get secrets
+```
