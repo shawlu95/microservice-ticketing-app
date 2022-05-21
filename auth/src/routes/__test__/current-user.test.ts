@@ -2,14 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 
 it('returns a 201 on successful signup', async () => {
-  const authResponse = await request(app)
-    .post('/api/users/signup')
-    .send({
-      email: 'test@test.com',
-      password: 'password',
-    })
-    .expect(201);
-  const cookie = authResponse.get('Set-Cookie');
+  const cookie = await global.signin();
 
   // cookie is not managed automatically by the follow up request
   // need to attach cookie manually
