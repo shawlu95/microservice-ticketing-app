@@ -58,12 +58,23 @@ npm start
 - NextJS is the common framework
 - NextJS talks to microservices and fetch data
 - Fully rendered html is returned
+  - great for mobile device (speed, compatibility)
+  - great of search engine optimization
 - Initial page load request cannot be customized with JWT!
   - JWT has to be stored in cookie
 - In real world, need to encrypt cookie and support language-interoperability
 - In this project, cookie is not encrypted
   - JWT is naturally resistant to tampering, OK in most purpose
   - No need to encrypt unless password/sensitive info is involved
+- In this project, we don't incorporate typescript for the NextJS app (low ROI)
+
+#### Implement with NextJS
+
+- [pages](./client/pages/) is a magical direcotry, all files are read at first load and file names are mapped to route names
+
+```bash
+npm install react react-dom next
+```
 
 ### Json Web Token
 
