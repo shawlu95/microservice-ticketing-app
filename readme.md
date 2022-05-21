@@ -130,3 +130,19 @@ npm install --save-dev \
   @types/supertest \
   jest ts-jest supertest mongodb-memory-server
 ```
+
+### Ingress-Nginx
+
+The service needs to be started before running `skaffold dev`. See instruction [here](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start).
+
+```bash
+# delete from default namespace
+kubectl delete --all deployments
+kubectl delete --all pods
+kubectl delete --all services
+
+# delete from ingress-nginx namespace
+kubectl delete --all deployments --namespace=ingress-nginx
+kubectl delete --all pods --namespace=ingress-nginx
+kubectl delete --all services --namespace=ingress-nginx
+```
