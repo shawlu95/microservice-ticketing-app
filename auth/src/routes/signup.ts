@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
+
 import { User } from '../model/user';
 import { RequestValidationErorr } from '../errors/request-validation-error';
 import { StatusCodes } from 'http-status-codes';
@@ -32,6 +34,17 @@ router.post(
 
     const user = User.build({ email, password });
     await user.save();
+
+    const userJwt = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      'ehgure'
+    );
+
+    // attach jwt to cookie (must be https protocol)
+    req.session = { jwt: userJwt };
 
     // send a cookie/jwt
     return res.status(StatusCodes.CREATED).send(user);
