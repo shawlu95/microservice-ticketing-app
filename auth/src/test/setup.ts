@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 
 let mongo: any;
 beforeAll(async () => {
+  process.env.jwt = 'asdfasdf';
+
   mongo = new MongoMemoryServer();
   await mongo.start();
   const mongoUri = mongo.getUri();

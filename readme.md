@@ -108,6 +108,11 @@ JSON.stringify(person);
   - easy to test multiple db at the same times
   - easy to run cuncurrent tests for different services
 
+#### convention
+
+- place `__test__` folder under the files to be tested
+- for each file, write `file.test.ts` inside `__test__` folder
+
 ```bash
 npm install --save-dev \
   @types/jest \
