@@ -16,3 +16,11 @@ build:
         manual:
           - src: 'src/**/*.ts' # files to sync
             dest: . # sync to running container
+    - image: shawlu95/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
