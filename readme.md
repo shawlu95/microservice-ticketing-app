@@ -103,3 +103,13 @@ JSON.stringify(person);
 - Cannot manually code the port in `index.ts` which will cause conflict
   - refactor into `app.ts` which is imported by `index.ts`
   - start-up logic lives in `index.ts`
+- running mongodb in memory
+  - easy to test multiple db at the same times
+  - easy to run cuncurrent tests for different services
+
+```bash
+npm install --save-dev \
+  @types/jest \
+  @types/supertest \
+  jest ts-jest supertest mongodb-memory-server
+```
