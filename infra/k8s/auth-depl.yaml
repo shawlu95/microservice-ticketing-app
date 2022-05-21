@@ -15,6 +15,14 @@ spec:
       containers:
         - name: auth
           image: shawlu95/auth
+          env:
+            - name: jwt # can be anything, better to be consistent
+              valueFrom:
+                secretKeyRef:
+                  # secret name defined in `create secret generic jwt-secret`
+                  name: jwt-secret
+                  # key defined in the 'jwt=asff' literal
+                  key: jwt
 ---
 apiVersion: v1
 kind: Service
