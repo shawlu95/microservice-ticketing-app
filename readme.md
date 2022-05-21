@@ -52,3 +52,15 @@ npm install typescript ts-node-dev express @types/express
 tsc --init
 npm start
 ```
+
+### Server Side Rendering
+
+- NextJS is the common framework
+- NextJS talks to microservices and fetch data
+- Fully rendered html is returned
+- Initial page load request cannot be customized with JWT!
+  - JWT has to be stored in cookie
+- In real world, need to encrypt cookie and support language-interoperability
+- In this project, cookie is not encrypted
+  - JWT is naturally resistant to tampering, OK in most purpose
+  - No need to encrypt unless password/sensitive info is involved
