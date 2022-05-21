@@ -2,10 +2,10 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
 let mongo: any;
-
 beforeAll(async () => {
   mongo = new MongoMemoryServer();
-  const mongoUri = await mongo.getUri();
+  await mongo.start();
+  const mongoUri = mongo.getUri();
   await mongoose.connect(mongoUri);
 });
 
