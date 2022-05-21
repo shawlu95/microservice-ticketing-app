@@ -81,3 +81,17 @@ A method of sharing key-value pair across pods (env variables)
 kubectl create secret generic jwt-secret --from-literal=jwt=asff
 kubectl get secrets
 ```
+
+### Javascript Quirk
+
+Override native method to provide a consistent serialization schemes across languages.
+
+```javascript
+const person = {
+  name: 'shaw',
+  toJSON() {
+    return 1;
+  },
+};
+JSON.stringify(person);
+```
