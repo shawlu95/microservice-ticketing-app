@@ -131,6 +131,14 @@ npm install --save-dev \
   jest ts-jest supertest mongodb-memory-server
 ```
 
+Manually poll client change:
+
+```bash
+k get pods
+k delete pod <pod_id>
+# client pod will be restarted
+```
+
 ### Ingress-Nginx
 
 The service needs to be started before running `skaffold dev`. See instruction [here](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start).
