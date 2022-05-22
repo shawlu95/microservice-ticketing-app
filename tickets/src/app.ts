@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
 import { errorHandler, NotFoundError } from '@shawtickets/common';
+import { createTicketRouter } from './routes/create';
 
 const app = express();
 app.set('trust proxy', true); // trust nginx
@@ -15,6 +16,7 @@ app.use(
   })
 );
 
+app.use(createTicketRouter);
 app.get('*', async (req, res) => {
   throw new NotFoundError();
 });
