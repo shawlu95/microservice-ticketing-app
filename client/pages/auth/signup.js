@@ -1,12 +1,19 @@
 import { useState } from "react";
+import axios from "axios";
 
 // Accessible at https://ticketing.dev/auth/signup
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
+    // Do not reload page
     event.preventDefault();
-    console.log(email, password);
+
+    // Create a new user, should see cookie in browser
+    const res = await axios.post('/api/users/signup', {
+      email, password
+    });
+    console.log(res.data);
   };
 
   return ( 
