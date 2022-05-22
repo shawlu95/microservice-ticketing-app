@@ -173,3 +173,11 @@ kubectl delete --all deployments --namespace=ingress-nginx
 kubectl delete --all pods --namespace=ingress-nginx
 kubectl delete --all services --namespace=ingress-nginx
 ```
+
+### NPM Packaging
+
+- Public: visible to all (free)
+- Organization: members can access
+  - private org: need to pay a fee
+  - public org: free
+- Private registry: direct access required (fee)
