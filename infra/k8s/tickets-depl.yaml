@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+spec:
+  replicas: 1
+  selector: # what pod to create
+    matchLabels:
+      app: tickets
+  template: # how to create each pod
+    metadata:
+      labels:
+        app: tickets
+    spec:
+      containers:
+        - name: tickets
+          image: shawlu95/tickets
+          env:
+            - name: jwt # can be anything, better to be consistent
+              valueFrom:
+                secretKeyRef:
+                  # secret name defined in `create secret generic jwt-secret`
+                  name: jwt-secret
+                  # key defined in the 'jwt=asff' literal
+                  key: jwt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec:
+  selector:
+    app: tickets
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
