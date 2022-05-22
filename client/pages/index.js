@@ -2,10 +2,7 @@ import buildClient from "../api/build-client";
 
 // Not allowed to fetch data in component in server-side render
 const App = ({ currentUser }) => {
-  console.log('Current user: ', currentUser);
-  return (<>
-  <h1>Landing page</h1>
-  </>);
+  return currentUser ? <h1>You are signed in</h1> : <h1>Please sign in</h1>;
 };
 
 /**
