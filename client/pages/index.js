@@ -17,7 +17,7 @@ const App = ({ currentUser }) => {
  * Here localhost refers to container, not your computer. 
  * Request is not routed to ingress-nginx
  */
-App.getInitialProps = async () => {
+App.getInitialProps = async ({ req }) => {
   // not working
   // const res = await axios.get('/api/users/currentuser');
 
@@ -30,9 +30,7 @@ App.getInitialProps = async () => {
     // We are on server, need to specify host, and attach cookie
     const url = 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser';
     const { data } = await axios.get(url, {
-      headers: {
-        Host: 'ticketing.dev'
-      }
+      headers: req.headers
     });
     return data;
   } else {
