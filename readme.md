@@ -68,6 +68,20 @@ npm start
   - No need to encrypt unless password/sensitive info is involved
 - In this project, we don't incorporate typescript for the NextJS app (low ROI)
 
+#### getInitialProps
+
+Executed on server:
+
+- hard refresh
+- click link from different domain
+- typing URL into address bar
+
+Executed on client:
+
+- navigating from one page to another while in app (e.g. route after sign-up)
+
+Implication: need to speficy the right domain depending on caller (server/browser)
+
 #### Implement with NextJS
 
 - [pages](./client/pages/) is a magical direcotry, all files are read at first load and file names are mapped to route names
@@ -142,6 +156,11 @@ k delete pod <pod_id>
 ### Ingress-Nginx
 
 The service needs to be started before running `skaffold dev`. See instruction [here](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start).
+
+Cross namespace communication: `http://SERVICE_NAME.NAMESPACE.svc.cluster.local/api/...`
+
+- example: `http://ingress-nginx.ingress-nginx.svc.cluster.local`
+- shorthand: external name service
 
 ```bash
 # delete from default namespace
