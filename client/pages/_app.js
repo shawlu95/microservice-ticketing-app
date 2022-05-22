@@ -4,7 +4,7 @@ import buildClient from '../api/build-client';
 
 /**
  * @dev NextJS will wrap component in custom wrap component
- * @dev Common props are returned from getInitialProps and 
+ * @dev Common props are returned from getInitialProps and
  * drilled down to every component
  */
 const AppComponent = ({ Component, pageProps, currentUser }) => {
@@ -13,7 +13,7 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
       <h1>Header {currentUser.email}</h1>
       <Component {...pageProps} />
     </div>
-  )
+  );
 };
 
 AppComponent.getInitialProps = async ({ Component, ctx: { req } }) => {
@@ -24,10 +24,10 @@ AppComponent.getInitialProps = async ({ Component, ctx: { req } }) => {
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps({ req });
   }
-  
+
   return {
     ...data,
-    pageProps
+    pageProps,
   };
 };
 
