@@ -3,9 +3,8 @@ import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
 import { User } from '../model/user';
-import { validateRequest } from '../middlewares/validate-request';
+import { validateRequest, BadRequestError } from '@shawtickets/common';
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
 
