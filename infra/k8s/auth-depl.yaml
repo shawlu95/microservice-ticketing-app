@@ -16,6 +16,8 @@ spec:
         - name: auth
           image: shawlu95/auth
           env:
+            - name: MONGO_URI
+              value: 'mongodb://auth-mongo-srv:27017/auth'
             - name: jwt # can be anything, better to be consistent
               valueFrom:
                 secretKeyRef:
