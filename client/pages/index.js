@@ -1,4 +1,4 @@
-import axios from 'axios';
+import buildClient from "../api/build-client";
 
 // Not allowed to fetch data in component in server-side render
 const App = ({ currentUser }) => {
@@ -18,26 +18,9 @@ const App = ({ currentUser }) => {
  * Request is not routed to ingress-nginx
  */
 App.getInitialProps = async ({ req }) => {
-  // not working
-  // const res = await axios.get('/api/users/currentuser');
-
-  // Option: use k8s node-port service name as domain, not best option
-  // Only works if both services are in the same namespace ('default' here)
-  // const res = await axios.get('http://auth-srv/api/users/currentuser');
-
-  // Option: send to ingress-nginx
-  if (typeof window === 'undefined') {
-    // We are on server, need to specify host, and attach cookie
-    const url = 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser';
-    const { data } = await axios.get(url, {
-      headers: req.headers
-    });
-    return data;
-  } else {
-    // we are on browser
-    const { data } = await axios.get('/api/users/currentuser');
-    return data;
-  }
+  const axios = buildClient({ req });
+  const { data } = await axios.get('/api/users/currentuser');
+  return data;
 };
 
 export default App;
