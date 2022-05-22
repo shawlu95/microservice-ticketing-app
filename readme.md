@@ -181,3 +181,16 @@ kubectl delete --all services --namespace=ingress-nginx
   - private org: need to pay a fee
   - public org: free
 - Private registry: direct access required (fee)
+
+#### Update package
+
+Publish common module and update consumer modules
+
+```bash
+npm update @shawtickets/common
+k get pods
+k exec -it pod_id sh
+
+# check current version
+vim package.json
+```
