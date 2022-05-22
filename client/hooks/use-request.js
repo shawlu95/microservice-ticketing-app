@@ -2,12 +2,16 @@ import axios from "axios";
 import { useState } from "react";
 
 /** @notice method must be post|get|patch */
-const useRequest = ({url, method, body}) => {
+const useRequest = ({url, method, body, onSuccess}) => {
   const [errors, setErrors] = useState(null);
   const doRequest = async () => {
     try {
       setErrors(null);
       const res = await axios[method](url, body);
+      if (onSuccess) {
+        // exec callback if provided
+        onSuccess(res.data);
+      }
       return res.data;
     } catch (err) {
       setErrors(

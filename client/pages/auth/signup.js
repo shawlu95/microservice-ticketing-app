@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import useRequest from "../../hooks/use-request";
+import Router from "next/router";
 
 // Accessible at https://ticketing.dev/auth/signup
 const Signup = () => {
@@ -9,14 +9,14 @@ const Signup = () => {
   const { doRequest, errors } = useRequest({
     url: '/api/users/signup', 
     method: 'post', 
-    body: { email, password }
+    body: { email, password },
+    onSuccess: () => Router.push('/')
   })
 
   const onSubmit = async (event) => {
     // Do not reload page
     event.preventDefault();
-
-    doRequest();
+    await doRequest();
   };
 
   return ( 
