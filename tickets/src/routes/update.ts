@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
+import { validators } from './create';
 import { Ticket } from '../models/ticket';
 import {
   validateRequest,
@@ -14,6 +15,8 @@ const router = express.Router();
 router.put(
   '/api/tickets/:id',
   requireAuth,
+  validators,
+  validateRequest,
   async (req: Request, res: Response) => {
     const ticket = await Ticket.findById(req.params.id);
     if (!ticket) {
