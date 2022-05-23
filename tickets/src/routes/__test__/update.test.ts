@@ -26,7 +26,19 @@ it('returns 401 if not authenticated', async () => {
     .expect(StatusCodes.UNAUTHORIZED);
 });
 
-it('returns 401 if not owner', async () => {});
+it('returns 401 if not owner', async () => {
+  const res = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', global.signin())
+    .send({ title: 'foo', price: 10 });
+
+  // every time global.sign is called, a different user is used
+  await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set('Cookie', global.signin())
+    .send({ title: 'bar', price: 20 })
+    .expect(StatusCodes.UNAUTHORIZED);
+});
 
 it('returns 400 if invalid title', async () => {});
 
