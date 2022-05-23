@@ -68,4 +68,20 @@ it('returns 400 if invalid price', async () => {
     .expect(StatusCodes.BAD_REQUEST);
 });
 
-it('returns 200 if successful update', async () => {});
+it('returns 200 if successful update', async () => {
+  const cookie = global.signin();
+  const res = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({ title: 'foo', price: 10 });
+
+  await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set('Cookie', cookie)
+    .send({ title: 'bar', price: 20 })
+    .expect(StatusCodes.OK);
+
+  const ticket = await request(app).get(`/api/tickets/${res.body.id}`).send();
+  expect(ticket.body.title).toEqual('bar');
+  expect(ticket.body.price).toEqual(20);
+});
