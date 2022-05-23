@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 import { requireAuth, validateRequest } from '@shawtickets/common';
+import { Ticket } from '../models/ticket';
 
 const router = express.Router();
 
@@ -17,8 +18,15 @@ router.post(
   requireAuth,
   validators,
   validateRequest,
-  (req: Request, res: Response) => {
-    res.sendStatus(StatusCodes.OK);
+  async (req: Request, res: Response) => {
+    const { title, price } = req.body;
+    const ticket = Ticket.build({
+      title,
+      price,
+      userId: req.currentUser!.id,
+    });
+    await ticket.save();
+    return res.sendStatus(StatusCodes.CREATED).send(ticket);
   }
 );
 
