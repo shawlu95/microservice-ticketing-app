@@ -10,6 +10,12 @@ const client = nats.connect('ticketing', randomBytes(4).toString('hex'), {
 client.on('connect', () => {
   console.log('Listener is connected to NATS');
 
+  // graceful shutdown
+  client.on('close', () => {
+    console.log('NATS connection closed!');
+    process.exit();
+  });
+
   const options = client.subscriptionOptions().setManualAckMode(true);
 
   const sub = client.subscribe('ticket:created', 'ticket-queue-group', options);
@@ -20,3 +26,6 @@ client.on('connect', () => {
     msg.ack();
   });
 });
+
+process.on('SIGINT', () => client.close());
+process.on('SIGTERM', () => client.close());

@@ -206,3 +206,4 @@ Totally different from NATS, built on top of NATS
 - Queue Groups assign consumbers into partitions and load-balancing
 - Default ack every event upon received. To handle custom logic (emulate atomic transac), must manual ack.
   - NATS will retry sending event if no ack is received after timeout
+- See subscription of channels on web [console](http://localhost:8222/streaming/channelsz?subs=1)
