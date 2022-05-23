@@ -5,11 +5,14 @@ import { Ticket } from '../../models/ticket';
 
 it('has a route handler listening to /api/tickets for post request', async () => {
   const res = await request(app).post('/api/tickets').send({});
-  expect(res.status).not.toEqual(404);
+  expect(res.status).not.toEqual(StatusCodes.NOT_FOUND);
 });
 
 it('returns 401 when not signed in', async () => {
-  await request(app).post('/api/tickets').send({}).expect(401);
+  await request(app)
+    .post('/api/tickets')
+    .send({})
+    .expect(StatusCodes.UNAUTHORIZED);
 });
 
 it('returns non-401 when signed in', async () => {
@@ -17,7 +20,7 @@ it('returns non-401 when signed in', async () => {
     .post('/api/tickets')
     .set('Cookie', global.signin())
     .send({});
-  expect(res.status).not.toEqual(401);
+  expect(res.status).not.toEqual(StatusCodes.UNAUTHORIZED);
 });
 
 it('return error if invalid title', async () => {

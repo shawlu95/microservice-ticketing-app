@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
 import { app } from '../../app';
 
@@ -8,7 +9,7 @@ it('fails when email does not exists', async () => {
       email: 'test@test.com',
       password: 'password',
     })
-    .expect(400);
+    .expect(StatusCodes.BAD_REQUEST);
 });
 
 it('fails when incorrect password is supplied', async () => {
@@ -18,7 +19,7 @@ it('fails when incorrect password is supplied', async () => {
       email: 'test@test.com',
       password: 'password',
     })
-    .expect(201);
+    .expect(StatusCodes.CREATED);
 
   await request(app)
     .post('/api/users/signin')
@@ -26,7 +27,7 @@ it('fails when incorrect password is supplied', async () => {
       email: 'test@test.com',
       password: 'password2',
     })
-    .expect(400);
+    .expect(StatusCodes.BAD_REQUEST);
 });
 
 it('responds with a cookie when given valid credential', async () => {
@@ -36,7 +37,7 @@ it('responds with a cookie when given valid credential', async () => {
       email: 'test@test.com',
       password: 'password',
     })
-    .expect(201);
+    .expect(StatusCodes.CREATED);
 
   const res = await request(app)
     .post('/api/users/signin')
@@ -44,6 +45,6 @@ it('responds with a cookie when given valid credential', async () => {
       email: 'test@test.com',
       password: 'password',
     })
-    .expect(200);
+    .expect(StatusCodes.OK);
   expect(res.get('Set-Cookie')).toBeDefined();
 });
