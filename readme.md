@@ -204,3 +204,5 @@ Totally different from NATS, built on top of NATS
 - client library for node: [node-nats-streaming](https://www.npmjs.com/package/node-nats-streaming)
 - Events are organized by channels/topics which require subscription
 - Queue Groups assign consumbers into partitions and load-balancing
+- Default ack every event upon received. To handle custom logic (emulate atomic transac), must manual ack.
+  - NATS will retry sending event if no ack is received after timeout
