@@ -10,7 +10,7 @@ const client = nats.connect('ticketing', randomBytes(4).toString('hex'), {
 client.on('connect', () => {
   console.log('Listener is connected to NATS');
 
-  const sub = client.subscribe('ticket:created');
+  const sub = client.subscribe('ticket:created', 'ticket-queue-group');
   sub.on('message', (msg: Message) => {
     const data = msg.getData() as string;
     const seq = msg.getSequence() as number;

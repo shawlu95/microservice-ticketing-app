@@ -203,3 +203,4 @@ Totally different from NATS, built on top of NATS
 - [docker](https://hub.docker.com/_/nats-streaming)
 - client library for node: [node-nats-streaming](https://www.npmjs.com/package/node-nats-streaming)
 - Events are organized by channels/topics which require subscription
+- Queue Groups assign consumbers into partitions and load-balancing
