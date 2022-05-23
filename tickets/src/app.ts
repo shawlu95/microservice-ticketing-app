@@ -7,6 +7,7 @@ import { errorHandler, NotFoundError, currentUser } from '@shawtickets/common';
 import { createTicketRouter } from './routes/create';
 import { showTicketRouter } from './routes/show';
 import { indexTicketRouter } from './routes';
+import { updateTicketRouter } from './routes/update';
 
 const app = express();
 app.set('trust proxy', true); // trust nginx
@@ -26,6 +27,7 @@ app.use(currentUser);
 app.use(createTicketRouter);
 app.use(showTicketRouter);
 app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 
 app.get('*', async (req, res) => {
   throw new NotFoundError();
