@@ -26,7 +26,7 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
-    return res.sendStatus(StatusCodes.CREATED).send(ticket);
+    return res.status(StatusCodes.CREATED).send(ticket);
   }
 );
 
