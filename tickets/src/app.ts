@@ -5,6 +5,7 @@ import cookieSession from 'cookie-session';
 
 import { errorHandler, NotFoundError, currentUser } from '@shawtickets/common';
 import { createTicketRouter } from './routes/create';
+import { showTicketRouter } from './routes/show';
 
 const app = express();
 app.set('trust proxy', true); // trust nginx
@@ -22,6 +23,8 @@ app.use(
 app.use(currentUser);
 
 app.use(createTicketRouter);
+app.use(showTicketRouter);
+
 app.get('*', async (req, res) => {
   throw new NotFoundError();
 });
