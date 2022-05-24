@@ -16,7 +16,11 @@ client.on('connect', () => {
     process.exit();
   });
 
-  const options = client.subscriptionOptions().setManualAckMode(true);
+  const options = client
+    .subscriptionOptions()
+    .setManualAckMode(true)
+    .setDeliverAllAvailable() // process from start
+    .setDurableName('ticket-queue'); // ignore acked events
 
   const sub = client.subscribe('ticket:created', 'ticket-queue-group', options);
   sub.on('message', (msg: Message) => {
