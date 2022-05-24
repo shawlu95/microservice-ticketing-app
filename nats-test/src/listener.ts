@@ -16,19 +16,8 @@ client.on('connect', () => {
     process.exit();
   });
 
-  const options = client
-    .subscriptionOptions()
-    .setManualAckMode(true)
-    .setDeliverAllAvailable() // process from start
-    .setDurableName('ticket-queue'); // ignore acked events
-
-  const sub = client.subscribe('ticket:created', 'ticket-queue-group', options);
-  sub.on('message', (msg: Message) => {
-    const data = msg.getData() as string;
-    const seq = msg.getSequence() as number;
-    console.log(`received event ${seq}: ${data}`);
-    msg.ack();
-  });
+  const listener = new TicketCreatedListener(client);
+  listener.listen();
 });
 
 process.on('SIGINT', () => client.close());
@@ -70,7 +59,6 @@ abstract class Listener {
 
       const parsed = this.parseMessage(msg);
       this.onMessage(parsed, msg);
-      msg.ack();
     });
   }
 
@@ -79,5 +67,15 @@ abstract class Listener {
     return typeof data === 'string'
       ? JSON.parse(data)
       : JSON.parse(data.toString('utf8'));
+  }
+}
+
+class TicketCreatedListener extends Listener {
+  subject = 'ticket:created';
+  queueGroupName = 'payment-service';
+
+  onMessage(data: any, msg: Message) {
+    console.log('ticket:created', data);
+    msg.ack();
   }
 }
