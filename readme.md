@@ -104,6 +104,8 @@ A method of sharing key-value pair across pods (env variables)
 
 ```bash
 kubectl create secret generic jwt-secret --from-literal=jwt=asff
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asff
+kubectl delete secret jwt-secret
 kubectl get secrets
 ```
 
