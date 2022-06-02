@@ -10,8 +10,10 @@ import {
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
 import { Order } from '../models/order';
+import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
+const EXPR_WINDOW_SEC = 15;
 
 const validators = [
   body('ticketId')
@@ -42,12 +44,21 @@ router.post(
     }
 
     // calculate expiration date of the order
+    const expr = new Date();
+    expr.setSeconds(expr.getSeconds() + EXPR_WINDOW_SEC);
 
     // build the order and save to database
+    const order = Order.build({
+      userId: req.currentUser!.id,
+      status: OrderStatus.Created,
+      expiresAt: expr,
+      ticket,
+    });
+    await order.save();
 
-    // publish event
+    // TODO: publish event
 
-    res.send({});
+    res.status(StatusCodes.CREATED).send(order);
   }
 );
 
