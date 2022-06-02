@@ -222,3 +222,18 @@ Implementation
 
 - Replicate ticket collections (only save title, price, version of ticket)
   - listening to ticket:created and ticket:updated event
+
+---
+
+## Event Flow
+
+### Order Created
+
+1. **Ticket Service**: reject further edit
+2. **Payment Service**: accept payment
+3. **Expiration Service**: start a timer to mark expiration
+
+### Order Cancelled
+
+1. **Ticket Service**: can accept edit
+2. **Payment Service**: do not accept payment
