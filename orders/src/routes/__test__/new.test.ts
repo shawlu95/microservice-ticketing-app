@@ -49,3 +49,5 @@ it('returns a ticket if successful', async () => {
     .send({ ticketId: ticket.id })
     .expect(StatusCodes.CREATED);
 });
+
+it.todo('emit an order created event');
