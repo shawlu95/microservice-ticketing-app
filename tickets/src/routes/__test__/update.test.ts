@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns 404 if ticket id is not found', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -84,4 +85,20 @@ it('returns 200 if successful update', async () => {
   const ticket = await request(app).get(`/api/tickets/${res.body.id}`).send();
   expect(ticket.body.title).toEqual('bar');
   expect(ticket.body.price).toEqual(20);
+});
+
+it('publishes an event', async () => {
+  const cookie = global.signin();
+  const res = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({ title: 'foo', price: 10 });
+
+  await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set('Cookie', cookie)
+    .send({ title: 'bar', price: 20 })
+    .expect(StatusCodes.OK);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
