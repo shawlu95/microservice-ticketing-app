@@ -4,6 +4,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Order, OrderStatus } from '../../models/order';
 import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns an error if not exists', async () => {
   const ticketId = new mongoose.Types.ObjectId(); // random ID
@@ -50,4 +51,18 @@ it('returns a ticket if successful', async () => {
     .expect(StatusCodes.CREATED);
 });
 
-it.todo('emit an order created event');
+it('emit an order created event', async () => {
+  const ticket = Ticket.build({
+    title: 'coldplay',
+    price: 15,
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({ ticketId: ticket.id })
+    .expect(StatusCodes.CREATED);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
