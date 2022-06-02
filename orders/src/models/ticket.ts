@@ -39,8 +39,6 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
-const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticket', ticketSchema);
-
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket(attrs);
 };
@@ -59,5 +57,7 @@ ticketSchema.methods.isReserved = async function () {
 
   return !!existingOrder;
 };
+
+const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticket', ticketSchema);
 
 export { Ticket, TicketDoc };
