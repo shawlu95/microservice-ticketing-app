@@ -209,3 +209,16 @@ Totally different from NATS, built on top of NATS
 - Default ack every event upon received. To handle custom logic (emulate atomic transac), must manual ack.
   - NATS will retry sending event if no ack is received after timeout
 - See subscription of channels on web [console](http://localhost:8222/streaming/channelsz?subs=1)
+
+---
+
+### Order Service
+
+- User clicks on a ticket to purchase it
+- User has 30 seconds to complete payment. Lock ticket and disallow others to purchase.
+- Unlock the ticket if payment is not completed in 30s
+
+Implementation
+
+- Replicate ticket collections (only save title, price, version of ticket)
+  - listening to ticket:created and ticket:updated event
