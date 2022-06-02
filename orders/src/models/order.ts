@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import { OrderStatus } from '@shawtickets/common';
 import { TicketDoc } from './ticket';
 
+// nit: export everything order-related from order.ts
+export { OrderStatus };
+
 interface OrderAttrs {
   userId: string;
   status: OrderStatus;
