@@ -251,3 +251,20 @@ Optimistic concurrency control
   - Remember the blog project, moderation service could modify the comment
   - If moderation service increment the moderated comment to, comment service would have to accept the version and increment to 2 when save the moderated comment.
   - Query service would see version 2 emitted by the comment service instead of 1! C
+
+```bash
+# log into mongo shell and check records
+k get pods
+k exec -it orders-mongo-depl-6c79d9dbf7-xsxqk mongo
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+orders  0.000GB
+> use orders
+switched to db orders
+> orders.tickets
+uncaught exception: ReferenceError: orders is not defined :
+@(shell):1:1
+> db.tickets.find(
+```

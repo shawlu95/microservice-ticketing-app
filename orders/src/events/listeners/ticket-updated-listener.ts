@@ -14,8 +14,10 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
       throw new Error('Ticket not found');
     }
 
-    const { title, price } = data;
-    ticket.set({ title, price });
+    // Take the version from event (outside) for granted
+    // But only modifies most recent version from local
+    const { title, price, version } = data;
+    ticket.set({ title, price, version });
     await ticket.save();
 
     msg.ack();

@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { Order, OrderStatus } from './order';
 
 /** @notice Only keep a subset of atts concerning order service */
@@ -54,7 +53,14 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
 };
 
 ticketSchema.set('versionKey', 'version');
-ticketSchema.plugin(updateIfCurrentPlugin);
+
+// Increment version by one at a time, fetch the most recent version
+ticketSchema.pre('save', function (done) {
+  this.$where = {
+    version: this.get('version') - 1,
+  };
+  done();
+});
 
 ticketSchema.statics.findByEvent = async (event: {
   id: string;
