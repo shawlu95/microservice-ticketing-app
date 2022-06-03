@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { Order, OrderStatus } from './order';
 
 /** @notice Only keep a subset of atts concerning order service */
@@ -51,6 +52,9 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
     price: attrs.price,
   });
 };
+
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.findByEvent = async (event: {
   id: string;
