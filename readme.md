@@ -247,3 +247,7 @@ Optimistic concurrency control
 - Not MongoDB-specific strategy, can easily generalize
 - To update, find the specific doc with specific version and apply the update
 - If the version is not found, update request would fail
+- Only the **primary service responsible for a record** should emit create/update/delete event
+  - Remember the blog project, moderation service could modify the comment
+  - If moderation service increment the moderated comment to, comment service would have to accept the version and increment to 2 when save the moderated comment.
+  - Query service would see version 2 emitted by the comment service instead of 1! C
