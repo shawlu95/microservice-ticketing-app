@@ -237,3 +237,13 @@ Implementation
 
 1. **Ticket Service**: can accept edit
 2. **Payment Service**: do not accept payment
+
+### Versioning
+
+Mongoose and MongoDB collaborate to implement versioning control.
+
+Optimistic concurrency control
+
+- Not MongoDB-specific strategy, can easily generalize
+- To update, find the specific doc with specific version and apply the update
+- If the version is not found, update request would fail
