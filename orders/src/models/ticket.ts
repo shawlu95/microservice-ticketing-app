@@ -11,6 +11,7 @@ interface TicketAttrs {
 interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
@@ -68,7 +69,7 @@ ticketSchema.statics.findByEvent = async (event: {
 }) => {
   return await Ticket.findById({
     _id: event.id,
-    version: event.version - 1,
+    version: event.version,
   });
 };
 
