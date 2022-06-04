@@ -3,6 +3,7 @@ import { app } from '../../app';
 import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 import { natsWrapper } from '../../nats-wrapper';
+import { Ticket } from '../../models/ticket';
 
 it('returns 404 if ticket id is not found', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -101,4 +102,22 @@ it('publishes an event', async () => {
     .expect(StatusCodes.OK);
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+
+it('rejects update if ticket is being reserved', async () => {
+  const cookie = global.signin();
+  const res = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({ title: 'foo', price: 10 });
+
+  const ticket = await Ticket.findById(res.body.id);
+  ticket!.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+  await ticket!.save();
+
+  await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set('Cookie', cookie)
+    .send({ title: 'bar', price: 20 })
+    .expect(StatusCodes.BAD_REQUEST);
 });

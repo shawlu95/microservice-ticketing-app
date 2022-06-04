@@ -8,6 +8,7 @@ import {
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
+  BadRequestError,
 } from '@shawtickets/common';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
@@ -23,6 +24,10 @@ router.put(
     const ticket = await Ticket.findById(req.params.id);
     if (!ticket) {
       throw new NotFoundError();
+    }
+
+    if (ticket.orderId) {
+      throw new BadRequestError('Ticket is being reserved. Try to edit later');
     }
 
     if (ticket.userId !== req.currentUser!.id) {
