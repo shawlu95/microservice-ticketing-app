@@ -238,7 +238,7 @@ Order Cancelled
 
 ---
 
-### Payment Service
+## Payment Service
 
 - Listen for `order:created` and `order:cancelled` event, and expect payment
 - Emit `charge:created` event
@@ -251,6 +251,18 @@ Which fields of order do we want to keep in payment service:
 - userId: required to ensure one user cannot pay another's order
 - expiresAt: not required to reject payment if expired. This is consumed by expiration service. Payment service just checks status, which is the original goal of the property
 - ticket: doesn't care
+
+### Stripe API
+
+1. User enters card number, Stripe returns a token as authorization (no charge yet). Safer to handle token than actual card number
+2. Token is submitted to payment service, which validates and requests Stripe to charge money
+
+- find order the user is trying to pay for
+- make sures order belongs to hte user
+- check prices
+
+3. Payments service sync with mongo, create a _charge_ record. Communicate with other services,
+4. Token path: Stripe -> browser -> payment service -> Stripe
 
 ---
 

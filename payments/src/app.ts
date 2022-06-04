@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
 import { errorHandler, NotFoundError, currentUser } from '@shawtickets/common';
+import { createChargeRouter } from './routes/create';
 
 const app = express();
 app.set('trust proxy', true); // trust nginx
@@ -19,6 +20,8 @@ app.use(
 
 // set req.currentUser
 app.use(currentUser);
+
+app.use(createChargeRouter);
 
 app.get('*', async (req, res) => {
   throw new NotFoundError();
