@@ -3,6 +3,7 @@ import { OrderCreatedListener } from '../order-created-listener';
 import { OrderCreatedEvent, OrderStatus } from '@shawtickets/common';
 import { natsWrapper } from '../../../nats-wrapper';
 import { Ticket } from '../../../models/ticket';
+import { Subjects } from '@shawtickets/common';
 import mongoose from 'mongoose';
 
 const setup = async () => {
@@ -59,4 +60,22 @@ it('acks the message', async () => {
   await listener.onMessage(data, msg);
 
   expect(msg.ack).toHaveBeenCalled();
+});
+
+it('publishes a ticket updated event', async () => {
+  const { listener, ticket, data, msg } = await setup();
+
+  expect(natsWrapper.client.publish).not.toHaveBeenCalled();
+
+  await listener.onMessage(data, msg);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+  // optional: check the publish is called with appropriate args
+  const [subject, str] = (natsWrapper.client.publish as jest.Mock).mock
+    .calls[0];
+  const ticketUpdatedEvent = JSON.parse(str);
+
+  expect(subject).toEqual(Subjects.TicketUpdated);
+  expect(ticketUpdatedEvent.orderId).toEqual(data.id);
 });
