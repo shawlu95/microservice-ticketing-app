@@ -212,7 +212,7 @@ Totally different from NATS, built on top of NATS
 
 ---
 
-### Order Service
+## Order Service
 
 - User clicks on a ticket to purchase it
 - User has 30 seconds to complete payment. Lock ticket and disallow others to purchase.
@@ -223,20 +223,36 @@ Implementation
 - Replicate ticket collections (only save title, price, version of ticket)
   - listening to ticket:created and ticket:updated event
 
----
+### Event Flow
 
-## Event Flow
-
-### Order Created
+Order Created
 
 1. **Ticket Service**: reject further edit
 2. **Payment Service**: accept payment
 3. **Expiration Service**: start a timer to mark expiration
 
-### Order Cancelled
+Order Cancelled
 
 1. **Ticket Service**: can accept edit
 2. **Payment Service**: do not accept payment
+
+---
+
+### Payment Service
+
+- Listen for `order:created` and `order:cancelled` event, and expect payment
+- Emit `charge:created` event
+
+Which fields of order do we want to keep in payment service:
+
+- id: required to mark payment and communicate event
+- status: required to reject payment if cancelled
+- version: required to check event order
+- userId: required to ensure one user cannot pay another's order
+- expiresAt: not required to reject payment if expired. This is consumed by expiration service. Payment service just checks status, which is the original goal of the property
+- ticket: doesn't care
+
+---
 
 ### Versioning
 
