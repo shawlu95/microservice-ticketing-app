@@ -40,8 +40,10 @@ it('finds, updates, and saves ticket', async () => {
 
   await listener.onMessage(data, msg);
 
-  // also works (not sure why)
-  // const upadtedTicket = await Ticket.findByEvent(data);
+  // fetch successful
+  // await Ticket.findById({ _id: ticket.id, version: 0 });
+  // await Ticket.findById({ _id: ticket.id, version: 1 });
+  // await Ticket.findById({ _id: ticket.id, version: 2 });
 
   const upadtedTicket = await Ticket.findById(ticket.id);
 
@@ -56,4 +58,15 @@ it('acks the message', async () => {
   await listener.onMessage(data, msg);
 
   expect(msg.ack).toHaveBeenCalled();
+});
+
+it('does not ack out of order event', async () => {
+  const { msg, data, listener, ticket } = await setup();
+
+  data.version += 1;
+
+  try {
+    await listener.onMessage(data, msg);
+  } catch (err) {}
+  expect(msg.ack).not.toHaveBeenCalled();
 });
