@@ -1,4 +1,6 @@
 import Queue from 'bull';
+import { OrderExpiredPublisher } from '../events/publishers/order-expired-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 // for the job object in Redis
 interface Payload {
@@ -12,7 +14,10 @@ const expirationQueue = new Queue<Payload>('order:expiration', {
 
 // what to do when receiving a job
 expirationQueue.process(async (job) => {
-  console.log('expiration:complete', job.data.orderId);
+  console.log('order:expired', job.data.orderId);
+  new OrderExpiredPublisher(natsWrapper.client).publish({
+    orderId: job.data.orderId,
+  });
 });
 
 export { expirationQueue };
