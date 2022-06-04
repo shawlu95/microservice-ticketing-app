@@ -19,6 +19,7 @@ it('returns an error if reserved', async () => {
   const ticket = Ticket.build({
     title: 'coldplay',
     price: 15,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 
@@ -41,6 +42,7 @@ it('returns a ticket if successful', async () => {
   const ticket = Ticket.build({
     title: 'coldplay',
     price: 15,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 
@@ -51,10 +53,11 @@ it('returns a ticket if successful', async () => {
     .expect(StatusCodes.CREATED);
 });
 
-it('emit an order created event', async () => {
+it('emits an order created event', async () => {
   const ticket = Ticket.build({
     title: 'coldplay',
     price: 15,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 
