@@ -2,31 +2,27 @@ import { Message } from 'node-nats-streaming';
 import {
   Subjects,
   Listener,
-  OrderCreatedEvent,
+  OrderCancelledEvent,
   NotFoundError,
 } from '@shawtickets/common';
 import { Ticket } from '../../models/ticket';
 import { queueGroupName } from './queue-group-name';
 import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher';
 
-export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
-  readonly subject = Subjects.OrderCreated;
+export class OrderCancalledListener extends Listener<OrderCancelledEvent> {
+  readonly subject = Subjects.OrderCancelled;
   queueGroupName = queueGroupName;
 
-  /**
-   * @notice We use an orderId field to mark the ticket as locked.
-   * The field can be used to retrieve user creating the order.
-   * The listener also pubishes its own ticket-updated-event
-   * when orderId is set (mark the ticker as locked) */
-  async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
-    const { id: orderId } = data;
+  async onMessage(data: OrderCancelledEvent['data'], msg: Message) {
     const ticket = await Ticket.findById(data.ticket.id);
 
     if (!ticket) {
       throw new NotFoundError();
     }
 
-    ticket.set({ orderId });
+    // optional value in typescript doesnt work well with null
+    // prefer undefined instead of null
+    ticket.set({ orderId: undefined });
     await ticket.save();
 
     await new TicketUpdatedPublisher(this.client).publish({
@@ -35,7 +31,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,
-      orderId: orderId,
+      orderId: ticket.orderId, // undefined
     });
 
     msg.ack();
