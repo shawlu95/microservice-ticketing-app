@@ -12,7 +12,7 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
       <Header currentUser={currentUser} />
-      <Component {...pageProps} />
+      <Component currentUser={currentUser} {...pageProps} />
     </div>
   );
 };
@@ -23,7 +23,12 @@ AppComponent.getInitialProps = async ({ Component, ctx: { req } }) => {
 
   let pageProps;
   if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps({ req });
+    // invoking child component's getInitialProps, pass down useful info
+    pageProps = await Component.getInitialProps({
+      req,
+      axios,
+      currentUser: data.currentUser,
+    });
   }
 
   return {

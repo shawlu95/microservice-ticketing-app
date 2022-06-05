@@ -1,7 +1,5 @@
-import buildClient from '../api/build-client';
-
 // Not allowed to fetch data in component in server-side render
-const App = ({ currentUser }) => {
+const LandingPage = ({ currentUser }) => {
   return currentUser ? <h1>You are signed in</h1> : <h1>Please sign in</h1>;
 };
 
@@ -14,10 +12,8 @@ const App = ({ currentUser }) => {
  * Here localhost refers to container, not your computer.
  * Request is not routed to ingress-nginx
  */
-App.getInitialProps = async ({ req }) => {
-  const axios = buildClient({ req });
-  const { data } = await axios.get('/api/users/currentuser');
-  return data;
+LandingPage.getInitialProps = async ({ req, axios, currentUser }) => {
+  return {};
 };
 
-export default App;
+export default LandingPage;

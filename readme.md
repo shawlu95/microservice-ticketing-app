@@ -67,6 +67,8 @@ npm start
   - JWT is naturally resistant to tampering, OK in most purpose
   - No need to encrypt unless password/sensitive info is involved
 - In this project, we don't incorporate typescript for the NextJS app (low ROI)
+- If the route contains a param, need to wrap the param in square bracket in file name
+  - route `/order/:orderid` => file name `/order/[orderid].js`
 
 #### getInitialProps
 
