@@ -10,6 +10,7 @@ import {
 } from '@shawtickets/common';
 import { stripe } from '../stripe';
 import { Order } from '../models/order';
+import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
 
@@ -45,7 +46,7 @@ router.post(
       source: token,
     });
 
-    res.send({ success: true });
+    res.status(StatusCodes.CREATED).send({ success: true });
   }
 );
 
