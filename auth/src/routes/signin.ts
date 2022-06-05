@@ -42,6 +42,7 @@ router.post(
     // attach jwt to cookie (must be https protocol)
     req.session = { jwt: userJwt };
 
+    console.log('Sign in successful!');
     return res.status(StatusCodes.OK).json(existing);
   }
 );
