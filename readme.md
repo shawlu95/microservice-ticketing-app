@@ -9,7 +9,7 @@ This project is a lot more complex. Multiple events are introduced and dev techn
 3. Run k8s cluster in the cloud and seamless local test
 4. Unit tests
 5. `Next.Js` Server-side React rendering
-6. MongoDB to store user, ticket, order, charge object
+6. MongoDB to store user, ticket, order, payment object
 7. Redis to handle ticket lock/unlock
 8. NATS streaming server
 9. Type `thisisunsafe` in chrome to get rid of warning
@@ -41,7 +41,7 @@ This project is a lot more complex. Multiple events are introduced and dev techn
 - OrderExpired
 - TicketCreated
 - TicketUpdated
-- ChargeCreated
+- PaymentCreated
 
 ### Startup
 
@@ -241,7 +241,7 @@ Order Cancelled
 ## Payment Service
 
 - Listen for `order:created` and `order:cancelled` event, and expect payment
-- Emit `charge:created` event
+- Emit `payment:created` event
 
 Which fields of order do we want to keep in payment service:
 
