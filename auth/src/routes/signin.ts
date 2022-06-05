@@ -36,7 +36,7 @@ router.post(
         id: existing.id,
         email: existing.email,
       },
-      process.env.jwt! // suppress typescript warning
+      process.env.jwt!
     );
 
     // attach jwt to cookie (must be https protocol)
