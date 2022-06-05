@@ -8,6 +8,8 @@ declare global {
 
 jest.mock('../nats-wrapper');
 
+process.env.STRIPE_KEY = 'foo';
+
 let mongo: any;
 beforeAll(async () => {
   process.env.jwt = 'asdfasdf';
@@ -27,8 +29,10 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await mongo.stop();
+  // exchange order of the two statement to resolve
+  // "Exceeded timeout of 5000 ms for a hook."
   await mongoose.connection.close();
+  await mongo.stop();
 });
 
 /**

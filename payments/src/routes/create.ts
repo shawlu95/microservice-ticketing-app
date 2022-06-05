@@ -46,7 +46,7 @@ router.post(
       source: token,
     });
 
-    res.status(StatusCodes.CREATED).send({ success: true });
+    return res.status(StatusCodes.CREATED).send({ success: true });
   }
 );
 
