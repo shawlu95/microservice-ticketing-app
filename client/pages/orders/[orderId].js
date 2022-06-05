@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-const OrderDetail = ({ order }) => {
+import StripeCheckout from 'react-stripe-checkout';
+
+const OrderDetail = ({ order, currentUser }) => {
   const [timeLeft, setTimeLeft] = useState('');
 
   useEffect(() => {
@@ -24,7 +26,18 @@ const OrderDetail = ({ order }) => {
     return <div>Order expired</div>;
   }
 
-  return <div>{timeLeft} seconds until order expires</div>;
+  // TODO: put stripeKey somewhere safe, even though it's publishable
+  return (
+    <div>
+      <h4>{timeLeft} seconds until order expires</h4>
+      <StripeCheckout
+        token={(token) => console.log(token)}
+        stripeKey='pk_test_51L73F6JWz1cFidyxecf0ONcCzCDN25Fxhgj0jT5pCTo31wIE61OQj3OD0hgHF87XJ2BMNndQ5xfiW08fcmxvzEv800clBXjpwS'
+        amount={order.ticket.price * 100}
+        email={currentUser.email}
+      />
+    </div>
+  );
 };
 
 OrderDetail.getInitialProps = async (context, axios) => {
