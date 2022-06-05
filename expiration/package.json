@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@shawtickets/common": "^1.0.24",
+    "@shawtickets/common": "^1.0.25",
     "@types/bull": "^3.15.8",
     "bull": "^4.8.3",
     "http-status-codes": "^2.2.0",
