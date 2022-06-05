@@ -326,3 +326,37 @@ uncaught exception: ReferenceError: orders is not defined :
 Big companies try to use one single repo for all services, because creating separate repo incur huge overhead (auth, CI, CD etc).
 
 We use **[GitHub Action](https://docs.github.com/en/actions)** to run test on pull request creation; deploys when branch merges into master.
+
+### Testing
+
+- Tests are triggered when pull request is created/updated.
+- Create one workflow file for each microservice
+- When a microservice is updated, only the corresponding test is run.
+
+### Deployment
+
+- Six microservices generate six workflows
+- When a microservice is updated, we build a new image, push to docker hub, and update deployment
+- The **infra workflow** is executed every time
+- DockerHub credentials are added to GitHub as secrets so docker push can be executed on digital ocean's machines
+
+In this tutorial we use Digital Ocean to deploy the app.
+
+```bash
+# Mac easy
+brew install doctl
+
+# get the access token on web
+doctl auth init
+
+# get connection info of the new cluster
+# context has been switched, all kubectl command will be issued to digital ocean
+doctl kubernetes cluster kubeconfig save ticketing
+
+# list all contexts (check the 'context' sections)
+kubectl config view
+
+# switch context (can also do from Docker desktop app)
+kubectl config use-context <context_name>
+kubectl config use-context docker-desktop
+```
