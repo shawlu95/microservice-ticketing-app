@@ -1,6 +1,27 @@
 // Not allowed to fetch data in component in server-side render
-const LandingPage = ({ currentUser }) => {
-  return currentUser ? <h1>You are signed in</h1> : <h1>Please sign in</h1>;
+const LandingPage = ({ currentUser, tickets }) => {
+  const ticketList = tickets.map((ticket) => {
+    return (
+      <tr key={ticket.id}>
+        <td>{ticket.title}</td>
+        <td>{ticket.price}</td>
+      </tr>
+    );
+  });
+  return (
+    <div>
+      <h1>Tickets</h1>
+      <table className='table'>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{ticketList}</tbody>
+      </table>
+    </div>
+  );
 };
 
 /**
@@ -13,7 +34,8 @@ const LandingPage = ({ currentUser }) => {
  * Request is not routed to ingress-nginx
  */
 LandingPage.getInitialProps = async ({ req, axios, currentUser }) => {
-  return {};
+  const { data } = await axios.get('/api/tickets');
+  return { tickets: data };
 };
 
 export default LandingPage;
