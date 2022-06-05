@@ -15,9 +15,15 @@ export class OrderExpiredListener extends Listener<OrderExpiredEvent> {
 
   async onMessage(data: OrderExpiredEvent['data'], msg: Message) {
     const order = await Order.findById(data.orderId).populate('ticket');
+
     if (!order) {
       throw new Error(`Order not found ${data.orderId}`);
     }
+
+    if (order.status === OrderStatus.Complete) {
+      return msg.ack();
+    }
+
     order.set({ status: OrderStatus.Cancelled });
     await order.save();
 
