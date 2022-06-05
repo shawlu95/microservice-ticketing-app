@@ -41,7 +41,7 @@ const LandingPage = ({ currentUser, tickets }) => {
  * Here localhost refers to container, not your computer.
  * Request is not routed to ingress-nginx
  */
-LandingPage.getInitialProps = async ({ req, axios, currentUser }) => {
+LandingPage.getInitialProps = async (context, axios, currentUser) => {
   const { data } = await axios.get('/api/tickets');
   return { tickets: data };
 };

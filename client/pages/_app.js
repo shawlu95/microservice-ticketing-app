@@ -19,18 +19,18 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   );
 };
 
-AppComponent.getInitialProps = async ({ Component, ctx: { req } }) => {
-  const axios = buildClient({ req });
+AppComponent.getInitialProps = async (appContext) => {
+  const axios = buildClient(appContext.ctx);
   const { data } = await axios.get('/api/users/currentuser');
 
   let pageProps;
-  if (Component.getInitialProps) {
+  if (appContext.Component.getInitialProps) {
     // invoking child component's getInitialProps, pass down useful info
-    pageProps = await Component.getInitialProps({
-      req,
+    pageProps = await appContext.Component.getInitialProps(
+      appContext.ctx,
       axios,
-      currentUser: data.currentUser,
-    });
+      data.currentUser
+    );
   }
 
   return {
