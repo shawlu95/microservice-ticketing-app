@@ -263,6 +263,8 @@ Which fields of order do we want to keep in payment service:
 
 3. Payments service sync with mongo, create a _charge_ record. Communicate with other services,
 4. Token path: Stripe -> browser -> payment service -> Stripe
+5. Save secret in kubectl: `k create secret generic stripe-secret --from-literal STRIPE_KEY=foo`
+6. Test mode provides a cheat token `tok_visa` that will always successfully charge
 
 ---
 
