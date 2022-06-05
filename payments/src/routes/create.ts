@@ -11,6 +11,7 @@ import {
 import { stripe } from '../stripe';
 import { Order } from '../models/order';
 import { StatusCodes } from 'http-status-codes';
+import { Payment } from '../models/payment';
 
 const router = express.Router();
 
@@ -40,11 +41,17 @@ router.post(
       throw new BadRequestError('Order cancelled');
     }
 
-    await stripe.charges.create({
+    const { id: stripeId } = await stripe.charges.create({
       currency: 'usd',
       amount: order.price * 100,
       source: token,
     });
+
+    const payment = Payment.build({
+      orderId,
+      stripeId,
+    });
+    await payment.save();
 
     return res.status(StatusCodes.CREATED).send({ success: true });
   }
