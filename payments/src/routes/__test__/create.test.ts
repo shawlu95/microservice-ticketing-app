@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
 import { Order } from '../../models/order';
+import { Payment } from '../../models/payment';
 import { stripe } from '../../stripe';
 
 // jest.mock('../../stripe');
@@ -89,4 +90,12 @@ it('returns 204 with valid inputs', async () => {
 
   expect(stripeCharge).toBeDefined();
   expect(stripeCharge!.currency).toEqual('usd');
+
+  const payment = await Payment.findOne({
+    orderId: order.id,
+    stripeId: stripeCharge!.id,
+  });
+
+  /** @notice null will pass toBeDefiend test */
+  expect(payment).not.toBeNull();
 });
