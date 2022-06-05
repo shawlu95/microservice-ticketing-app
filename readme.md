@@ -1,8 +1,8 @@
-## Ticketing App
+# Ticketing App
 
 This project is a lot more complex. Multiple events are introduced and dev techniques including npm module packaging, live cluster deployment.
 
-### Learning Experience
+## Learning Experience
 
 1. Build a central library as a npm module to share code between different services
 2. All events are defined in the npm module
@@ -14,7 +14,9 @@ This project is a lot more complex. Multiple events are introduced and dev techn
 8. NATS streaming server
 9. Type `thisisunsafe` in chrome to get rid of warning
 
-### App Intro
+---
+
+## App Intro
 
 - User can lsit a ticket for an event for sale
 - User can purchase listed ticket
@@ -26,34 +28,38 @@ This project is a lot more complex. Multiple events are introduced and dev techn
 
 ### Services
 
-- auth
-- tickets
-- orders
-- expiration
-- payment
+- auth: handles signup, signin, signout
+- tickets: creates, updates ticket
+- orders: create order
+- expiration: start timer on order
+- payment: make payment using Stripe API
 
 ### Events
 
-- UserCreated
-- UserUpdated
-- OrderCreated
-- OrderCancelled
-- OrderExpired
-- TicketCreated
-- TicketUpdated
-- PaymentCreated
+- **UserCreated**
+- **UserUpdated**
+- **TicketCreated**
+  - pub by: tickets service
+  - sub by: orders service
+- **TicketUpdated**
+  - pub by: tickets service
+  - sub by: orders service
+- **OrderCreated**:
+  - pub by: orders service
+  - sub by: expiration service, payments service, tickets service
+- **OrderCancelled**:
+  - pub by: orders service
+  - sub by: payments service, tickets service
+- **OrderExpired**:
+  - pub by: expiration service
+  - sub by: orders service
+- **PaymentCreated**
+  - pub by: payments service
+  - sub by: orders service
 
-### Startup
+---
 
-```bash
-cd auth
-npm init -y
-npm install typescript ts-node-dev express @types/express
-tsc --init
-npm start
-```
-
-### Server Side Rendering
+## Server Side Rendering
 
 - NextJS is the common framework
 - NextJS talks to microservices and fetch data
@@ -70,7 +76,7 @@ npm start
 - If the route contains a param, need to wrap the param in square bracket in file name
   - route `/order/:orderid` => file name `/order/[orderid].js`
 
-#### getInitialProps
+### getInitialProps
 
 Executed on server:
 
@@ -84,7 +90,7 @@ Executed on client:
 
 Implication: need to speficy the right domain depending on caller (server/browser)
 
-#### Implement with NextJS
+### Implement with NextJS
 
 - [pages](./client/pages/) is a magical direcotry, all files are read at first load and file names are mapped to route names
 
@@ -92,7 +98,9 @@ Implication: need to speficy the right domain depending on caller (server/browse
 npm install react react-dom next
 ```
 
-### Json Web Token
+---
+
+## Json Web Token
 
 - consists of three parts: header, payload, verify signature
 - to generate jwt: provide payload and signing key
@@ -100,18 +108,7 @@ npm install react react-dom next
 - decode jwt token to a json object [here](https://www.base64decode.org)
 - decode jwt string to original content [here](https://jwt.io)
 
-### Kubernetes Secret
-
-A method of sharing key-value pair across pods (env variables)
-
-```bash
-kubectl create secret generic jwt-secret --from-literal=jwt=asff
-kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asff
-kubectl delete secret jwt-secret
-kubectl get secrets
-```
-
-### Javascript Quirk
+## Javascript Quirk
 
 Override native method to provide a consistent serialization schemes across languages.
 
@@ -125,7 +122,22 @@ const person = {
 JSON.stringify(person);
 ```
 
-### Unit Test
+---
+
+## Kubernetes Secret
+
+A method of sharing key-value pair across pods (env variables)
+
+```bash
+kubectl create secret generic jwt-secret --from-literal=jwt=asff
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asff
+kubectl delete secret jwt-secret
+kubectl get secrets
+```
+
+---
+
+## Unit Test
 
 - Be clear with the scope with test (single service, cross service, event-bus etc)
 - We use `supertest` library
@@ -157,7 +169,9 @@ k delete pod <pod_id>
 # client pod will be restarted
 ```
 
-### Ingress-Nginx
+---
+
+## Ingress-Nginx
 
 The service needs to be started before running `skaffold dev`. See instruction [here](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start).
 
@@ -178,7 +192,9 @@ kubectl delete --all pods --namespace=ingress-nginx
 kubectl delete --all services --namespace=ingress-nginx
 ```
 
-### NPM Packaging
+---
+
+## NPM Packaging
 
 - Public: visible to all (free)
 - Organization: members can access
@@ -186,7 +202,7 @@ kubectl delete --all services --namespace=ingress-nginx
   - public org: free
 - Private registry: direct access required (fee)
 
-#### Update package
+### Update package
 
 Publish common module and update consumer modules
 
@@ -199,7 +215,9 @@ k exec -it pod_id sh
 vim package.json
 ```
 
-### NATS Streaming Server
+---
+
+## NATS Streaming Server
 
 Totally different from NATS, built on top of NATS
 
@@ -300,3 +318,11 @@ uncaught exception: ReferenceError: orders is not defined :
 @(shell):1:1
 > db.tickets.find(
 ```
+
+---
+
+## Continuous Integration
+
+Big companies try to use one single repo for all services, because creating separate repo incur huge overhead (auth, CI, CD etc).
+
+We use **[GitHub Action](https://docs.github.com/en/actions)** to run test on pull request creation; deploys when branch merges into master.
