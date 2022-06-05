@@ -300,3 +300,11 @@ uncaught exception: ReferenceError: orders is not defined :
 @(shell):1:1
 > db.tickets.find(
 ```
+
+---
+
+## Continuous Integration
+
+Big companies try to use one single repo for all services, because creating separate repo incur huge overhead (auth, CI, CD etc).
+
+We use **[GitHub Action](https://docs.github.com/en/actions)** to run test on pull request creation; deploys when branch merges into master.
