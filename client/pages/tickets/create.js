@@ -16,7 +16,6 @@ const CreateTicket = () => {
   });
 
   // onBlur is triggered when user clicks away from first responder
-  // round dollar to two decimal
   const onBlur = () => {
     const value = parseFloat(price);
     if (isNaN(value)) {
