@@ -340,6 +340,7 @@ We use **[GitHub Action](https://docs.github.com/en/actions)** to run test on pu
 - The **infra workflow** is executed every time
 - DockerHub credentials are added to GitHub as secrets so docker push can be executed on digital ocean's machines
 - In GitHub container, install `doctl`, switch context to digital ocean, deploy the latest image
+- The [ingress-srv.yaml](./infra/k8s-prod/ingress-srv.yaml) points to the actual purchased domain.
 
 In this tutorial we use Digital Ocean to deploy the app.
 
