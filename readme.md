@@ -342,7 +342,7 @@ We use **[GitHub Action](https://docs.github.com/en/actions)** to run test on pu
 - In GitHub container, install `doctl`, switch context to digital ocean, deploy the latest image
 - The [ingress-srv.yaml](./infra/k8s-prod/ingress-srv.yaml) points to the actual purchased domain.
 
-In this tutorial we use Digital Ocean to deploy the app.
+In this tutorial we use Digital Ocean to deploy the app. To setup ingress-nginx, use the [digital ocean](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) command from documentation.
 
 ```bash
 # Mac easy
@@ -361,4 +361,8 @@ kubectl config view
 # switch context (can also do from Docker desktop app)
 kubectl config use-context <context_name>
 kubectl config use-context docker-desktop
+
+# set up secret after switching context
+kubectl create secret generic jwt-secret --from-literal=jwt=foo
+kubectl create secret generic stripe-secret --from-literal STRIPE_KEY=bar
 ```
