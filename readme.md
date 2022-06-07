@@ -366,3 +366,40 @@ kubectl config use-context docker-desktop
 kubectl create secret generic jwt-secret --from-literal=jwt=foo
 kubectl create secret generic stripe-secret --from-literal STRIPE_KEY=bar
 ```
+
+### Google Cloud
+
+- create a project on google cloud
+- start a k8s cluster
+- enable Google Cloud Build which auto-builds source code into images
+- update skaffold.yaml to use Google Cloud Build
+- setup ingress-nginx on google cloud cluster [kubernetes.github.io/ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke)
+- update `/etc/hosts` file to point to remote cluster (load balancer IP)
+- restart skaffold
+
+```bash
+gcloud auth login
+cd ~/microservice-ticketing-app
+
+# select "reinitialize"
+# select the project ID (see web UI)
+# select the region selected to crete k8s cluster
+gcloud init
+
+# not needed if running Docker Desktop
+gcloud components install kubectl
+
+# configure gcloud ticketing-dev context
+gcloud container clusters get-credentials ticketing-dev
+
+# see setup instruction @https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/cloud/deploy.yaml
+
+gcloud auth application-default login
+
+# set up secret after switching context
+kubectl create secret generic jwt-secret --from-literal=jwt=foo
+kubectl create secret generic stripe-secret --from-literal STRIPE_KEY=bar
+
+skaffold dev
+```
