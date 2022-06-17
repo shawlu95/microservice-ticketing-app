@@ -182,6 +182,7 @@ Cross namespace communication: `http://SERVICE_NAME.NAMESPACE.svc.cluster.local/
 
 ```bash
 # delete from default namespace
+# use --grace-period=0 --force flag if stuck
 kubectl delete --all deployments
 kubectl delete --all pods
 kubectl delete --all services
@@ -342,7 +343,13 @@ We use **[GitHub Action](https://docs.github.com/en/actions)** to run test on pu
 - In GitHub container, install `doctl`, switch context to digital ocean, deploy the latest image
 - The [ingress-srv.yaml](./infra/k8s-prod/ingress-srv.yaml) points to the actual purchased domain.
 
-In this tutorial we use Digital Ocean to deploy the app. To setup ingress-nginx, use the [digital ocean](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) command from documentation.
+In this tutorial we use Digital Ocean to deploy the app.
+
+1. Create cluster on web console
+2. Add context to local
+3. To setup ingress-nginx, use the [digital ocean](https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean) command from documentation.
+4. Set up secret
+5. Manually execute deploy (see [deploy-manifests.yaml](./.github/workflows/deploy-manifests.yaml))
 
 ```bash
 # Mac easy
@@ -361,6 +368,10 @@ kubectl config view
 # switch context (can also do from Docker desktop app)
 kubectl config use-context <context_name>
 kubectl config use-context docker-desktop
+
+# delete context
+kubectl config get-contexts
+kubectl config delete-context <context_name>
 
 # set up secret after switching context
 kubectl create secret generic jwt-secret --from-literal=jwt=foo
